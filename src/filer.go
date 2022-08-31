@@ -14,12 +14,12 @@ type File struct {
 
 func (file *File) Insert(db *sqlx.DB) int {
 	tx := db.MustBegin()
+	defer tx.Commit()
 	_, err := tx.Exec("INSERT INTO FILE(NAME,FILE_ID) VALUES ($1,$2)", file.Name, file.File_ID)
 	if err != nil {
 		log.Println("File Already Exists")
 		return 0
 	}
-	tx.Commit()
 	return 1
 }
 
